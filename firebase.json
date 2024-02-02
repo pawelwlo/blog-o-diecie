@@ -1,0 +1,16 @@
+{
+    "hosting": {
+      "public": "diet-blog", 
+      "ignore": [
+        "firebase.json", 
+        "**/.*",
+        "**/node_modules/**" 
+      ],
+      "rewrites": [
+        {
+          "source": "https://pawelwlo.github.io/dieta-blog/home.html"
+        }
+      ]
+    }
+  }
+  
