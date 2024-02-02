@@ -1,5 +1,5 @@
 import { db } from "/js/firebase.js";
-import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
 
 // let blogID = decodeURI(location.pathname.split("/").pop());
