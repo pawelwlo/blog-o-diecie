@@ -1,6 +1,6 @@
 
 import {db} from "/js/firebase.js"
-import { doc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { doc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
  
 
 const blogTitleField = document.querySelector('.title');
