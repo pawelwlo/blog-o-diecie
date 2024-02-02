@@ -18,8 +18,8 @@ getDoc(docRef)
         
       const data = doc.data();
       setupBlog(data);
-    // } else {
-    //   location.replace("/");
+    } else {
+      location.replace("/blog-o-diecie/");
     }
   })
   .catch((error) => {
