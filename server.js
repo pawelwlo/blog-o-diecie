@@ -2,18 +2,18 @@ const express = require('express');
 const path = require('path');
 const fileupload = require('express-fileupload');
 
-let initial_path = path.join(__dirname, "/");
+let initial_path = path.join(__dirname, "/blog-o-diecie/");
 
 const app = express();
 app.use(express.static(initial_path));
 app.use(fileupload());
 
 app.get('/', (req,res) => {
-    res.sendFile(path.join(initial_path, "/home.html"));
+    res.sendFile(path.join(initial_path, "/blog-o-diecie/home.html"));
 })
 
 app.get('/editor', (req, res) => {
-    res.sendFile(path.join(initial_path, "/editor.html"));
+    res.sendFile(path.join(initial_path, "/blog-o-diecie/editor.html"));
 })
 
 //upload link
@@ -38,15 +38,15 @@ app.post('/uploads', (req, res) => {
 });
 
 app.get("/:blog", (req,res) => {
-    res.sendFile(path.join(initial_path, "/blog.html"));
+    res.sendFile(path.join(initial_path, "/blog-o-diecie/blog.html"));
 }) 
 
 app.get("/:about", (req,res) => {
-    res.sendFile(path.join(initial_path, "/about.html"));
+    res.sendFile(path.join(initial_path, "/blog-o-diecie/about.html"));
 }) 
 
 app.get("/:contact", (req,res) => {
-    res.sendFile(path.join(initial_path, "/contact.html"));
+    res.sendFile(path.join(initial_path, "/blog-o-diecie/contact.html"));
 }) 
 app.use((req,res) => {
     res.json("404");
