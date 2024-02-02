@@ -1,4 +1,4 @@
-import { db } from "/js/firebase.js";
+import { db } from "/blog-o-diecie/js/firebase.js";
 import { doc, getDocs, collection } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
 const blogSection = document.querySelector('.blog-section');
