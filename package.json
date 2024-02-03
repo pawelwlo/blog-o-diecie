@@ -1,9 +1,9 @@
 {
   "name": "blog-o-diecie",
   "version": "1.0.0",
-  "main": "server.js",
+  "main": "home.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node home.js"
   },
   "author": "",
   "license": "ISC",
