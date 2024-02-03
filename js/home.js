@@ -3,13 +3,29 @@ import { doc, getDocs, collection } from "https://www.gstatic.com/firebasejs/10.
 
 const blogSection = document.querySelector('.blog-section');
 
+let pathSegments = location.pathname.split("/").filter(segment => segment !== "");
+let blogID = pathSegments[pathSegments.length - 1];
+
+console.log("Original path home.js:", location.pathname);
+console.log("Path segments home.js:", pathSegments);
+console.log("Extracted blogID home.js:", blogID);
+let docRef = doc(db, "blogs", blogID);
+
+
 getDocs(collection(db, "blogs")).then((snapshot) => {
     snapshot.forEach((blog) => {
-        if (blog.id !== decodeURI(location.pathname.split("/").pop())) {
+        if (blog.id !== pathSegments) {
             createBlog(blog);
         }
     });
 });
+// getDocs(collection(db, "blogs")).then((snapshot) => {
+//     snapshot.forEach((blog) => {
+//         if (blog.id !== decodeURI(location.pathname.split("/").pop())) {
+//             createBlog(blog);
+//         }
+//     });
+// });
 
 const createBlog = (blog) => {
     const data = blog.data();
