@@ -4,76 +4,196 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <link rel="stylesheet" href="/blog-o-diecie/css/editor.css">
-    <link rel="stylesheet" href="/blog-o-diecie/css/blog.css">
-    <link rel="stylesheet" href="/blog-o-diecie/css/home.css">
+    <link rel="stylesheet" href="/css/editor.css">
+    <link rel="stylesheet" href="/css/blog.css">
+    <link rel="stylesheet" href="/css/index.css">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300&family=Pacifico&display=swap" rel="stylesheet">
-<link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300&family=Pacifico&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
 
     <title>Dieta Na Codzien</title>
 </head>
 <body>
     
-    <nav class="navbar">
-            
+    <nav class="navbar">   
         <ul class="links-container">
             <li class="link-item">
-                <a href="/blog-o-diecie/about.html" class="link">O mnie</a> 
+                <a href="/about.html" class="link">O mnie</a> 
             </li>
             <li class="link-item">
-                <a href="/blog-o-diecie/home.html" class="link">Blog</a>
+                <a href="/index.html" class="link">Blog</a>
             </li>
             <li class="link-item">
-                <a href="/blog-o-diecie/editor.html" class="link">Editor</a>
+                <a href="/editor.html" class="link">Editor</a>
             </li>
             <li class="link-item">
-                <a href="/blog-o-diecie/contact.html" class="link">Kontakt</a>
+                <a href="/contact.html" class="link">Kontakt</a>
             </li>
         </ul>
-   
-        <!-- <div class="logo">
-            <img id="logo" alt="logo" src="/img/logo.png">
-            <span id="logo-text">Dieta Na Co Dzień </span>
-    
-        </div> -->
-</nav>
+    </nav>
+
     <main>
-       
-
-    <div class="banner"></div>
-    <div class="blog">
-        <h1 class="title"></h1>
-        <p class="published"><span>opublikowano dnia - </span></p>
-        <div class="article"></div>
-    </div>
-
-    <h1 class="sub-heading">Czytaj dalej</h1>
-    <section class="blog-section">
-        
+        <section id="logged-out-view">
+    
+            <nav class="navbar">
+                
+                <ul class="links-container">
+                    <li class="link-item">
+                        <a href="/about.html" class="link">O mnie</a> 
+                    </li>
+                    <li class="link-item">
+                        <a href="/index.html" class="link">Blog</a>
+                    </li>
+                    <li class="link-item">
+                        <a href="/contact.html" class="link">Kontakt</a>
+                    </li>
+                    
+                    
+                </ul>
            
+    
+                
+        </nav>
+        
+        
+        <div id="myForm">
+            <form class="form-container">
+                <div class="provider-buttons">
+                    
+                </div>
+                
+                <div class="auth-fields-and-buttons">
+                    <input id="email-input" type="email" placeholder="Email">
+                    <input id="password-input" type="password" placeholder="Password">
+                    
+                    <button id="sign-in-btn" class="primary-btn">Sign in</button>
+                    <button id="create-account-btn" class="secondary-btn">Create Account</button>
+                    
+            </form>
+          </div>
+            
+        
+    
+                
             
        
+    
+     
+        <main>
+            
+            
+           
+    
+            <h1 class="blog-tytul">Mój blog </h1>
+            <div class="banner"></div>
 
+            <div class="blog">
+                <h1 class="title"></h1>
+                <p class="published"><span> </span></p>
+                <div class="imageBlog"></div>
+    
+                <div class="article"></div>
+              </div>
+            
+
+
+    <h1 class="sub-heading">Czytaj dalej</h1>
+
+            
+           <!-- <section class="blog-section" id="blog-section">
+            
+               
+    
+           </section> -->
+    
+           </main>
+        </section>
+         
+        
+    
+    
+        <section id="logged-in-view">
+        
+            <nav class="navbar">
+                
+                <ul class="links-container">
+                    <li class="link-item">
+                        <a href="/about.html" class="link">O mnie</a> 
+                    </li>
+                    <li class="link-item">
+                        <a href="/index.html" class="link">Blog</a>
+                    </li>
+                    <li class="link-item">
+                        <a href="/contact.html" class="link">Kontakt</a>
+                    </li>
+                    <li class="link-item">
+                        <a href="/editor.html" class="link">dodaj post</a>
+                    </li>
+                    <li class="link-item">
+                        <button id="sign-out">Wyloguj</button>
+                    </li>
+                </ul>
+           
+                
+        </nav>
+      
+        
+            
+                
+        
+                
+            
+       
+    
+     
+        <main>
+            
+            <div class="user-section">
+                
+                <h2 id="user-greeting"></h2>
+            </div>
+           
+    
+            <h1 class="blog-tytul">Mój blog </h1>
+
+            <div class="banner"></div>
+
+
+            <div class="blog">
+                <h1 class="title"></h1>
+                <p class="published"><span> </span></p>
+                <div class="imageBlog"></div>
+    
+                <div class="article"></div>
+              </div>
+            
+
+
+    <h1 class="sub-heading">Czytaj dalej</h1>
+
+    <section class="blog-section" id="blog-section-log">
+            
+               
+    
     </section>
-  
-
-
+        </main>
+        </section>
     </main>
+
     <footer>
         <span id="footer-text"> © 2023 Dieta Na Co Dzień. All Rights Reserved.</span>
     </footer>
+
     <script type="module" src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js"></script>
     <script type="module" src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js"></script>
-    <script src="/blog-o-diecie/js/firebase.js" type="module"></script>
-    <script src="/blog-o-diecie/js/editor.js" type="module"></script>
+    <script src="/js/firebase.js" type="module"></script>
+    <script src="/js/index.js" type="module"></script>
+    <script src="/js/blog.js" type="module"></script>
    
-    <script src="/blog-o-diecie/js/blog.js" type="module"></script>
-    <script src="/blog-o-diecie/js/home.js" type="module"></script>
 </body>
 </html>

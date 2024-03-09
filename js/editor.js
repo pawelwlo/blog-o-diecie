@@ -1,91 +1,195 @@
+import { auth } from "/js/firebase.js";
+import {
+  db,
+  collection,
+  addDoc,
+  serverTimestamp,
+  ref,
+  getStorage,
+  uploadBytes,
+  getDownloadURL,
+  setDoc,
+  doc
+} from "/js/firebase.js";
 
-import {db} from "/blog-o-diecie/js/firebase.js"
-import { doc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
- 
-
-const blogTitleField = document.querySelector('.title');
-const articleField = document.querySelector('.article');
-
-// Banner
-const bannerImage = document.querySelector('#banner-upload');
+const bannerPicUpload = document.getElementById("banner-upload");
+const blogTitle = document.getElementById("title");
+const article = document.getElementById("article");
+const publishButton = document.getElementById("publish-btn");
+const user = auth.currentUser;
 const banner = document.querySelector(".banner");
-let bannerPath;
-
-const publishBtn = document.querySelector('.publish-btn');
 const uploadInput = document.querySelector('#image-upload');
+let bannerPath;
+const storage = getStorage();
+const storageRef = ref(storage);
 
-bannerImage.addEventListener('change', () => {
-    uploadImage(bannerImage, "banner");
+bannerPicUpload.addEventListener("change", function (event) {
+  event.preventDefault();
+  uploadImage(event);
 });
 
-uploadInput.addEventListener('change', () => {
-    uploadImage(uploadInput, "image");
-})
+publishButton.addEventListener("click", function (event) {
+  event.preventDefault();
+  publishBlog();
+});
 
+uploadInput.addEventListener('change', function (event) {
+  event.preventDefault();
+  uploadArticleImage(event);
+});
 
+async function uploadImage(event) {
+  const file = event.target.files[0];
 
-const uploadImage = (uploadFile, uploadType) => {
-    const [file] = uploadFile.files;
-    if (file && file.type.includes("image")) {
-        const formData = new FormData();
-        formData.append('image', file);
+  if (file) {
+    const timestamp = new Date().getTime();
+    const filename = `file_${timestamp}_${file.name}`;
+    const fileRef = ref(storageRef, filename);
 
+    try {
+      await uploadBytes(fileRef, file);
+      console.log('File uploaded successfully!');
 
-     
-        fetch('uploads', {
-            method: 'POST', 
-            body: formData
-        }).then(res => res.json())
-            .then(data => {
-                if (uploadType === "image") { 
-                    addImage(data, file.name);
-                } else  {
-                    bannerPath = `${location.origin}/${data}`;
-                    banner.style.backgroundImage = `url("${bannerPath}")`;
-                }
-                
-            })
+      const downloadURL = await getDownloadURL(fileRef);
+      bannerPath = downloadURL;
+      banner.style.backgroundImage = `url("${bannerPath}")`;
+    } catch (error) {
+      console.error('Error uploading file:', error.message);
+    }
+  }
+}
+
+function publishBlog() {
+  const postBody = article.value;
+  const postTitle = blogTitle.value;
+
+  if (postBody) {
+    if (bannerPath) {
+      addPostToDB(postTitle, postBody, bannerPath, user);
+      console.log("Blog published");
+      clearInputField(article);
+      clearInputField(blogTitle);
+      clearInputField(banner);
+      swal("Twój wpis bloga został opublikowany!");
+
+      // Split the postBody into paragraphs and append to the article
+      appendParagraphsToArticle(postBody);
     } else {
-        alert("dodaj tylko zdjecia");
+      alert("Dodaj baner do bloga przed publikacją.");
     }
-};
-
-const addBanner = (bannerURL) => {
-    bannerPath = `${location.origin}/${bannerURL}`;
-    banner.style.backgroundImage = `url("${bannerPath}")`;
+  }
 }
 
-const addImage = (imagepath, alt) => {
-    let curPos = articleField.selectionStart;
-    let textToInsert = `\r![${alt}](${imagepath})\r`;
-    articleField.value = articleField.value.slice(0, curPos) + textToInsert + articleField.value.slice(curPos);
+function appendParagraphsToArticle(text) {
+  const ele = article; // Assuming 'article' is an HTML element
+
+  // Split text into paragraphs and list items
+  const lines = text.split("\n").filter(item => item.length);
+
+  // Detect and append paragraphs or list items to the article
+  let isInList = false;
+  let listItems = [];
+
+  lines.forEach(line => {
+    if (line.trim().startsWith("* ")) {
+      // Treat as list item
+      isInList = true;
+      listItems.push(line.trim().substring(2)); // Remove "* " prefix
+    } else {
+      // Treat as paragraph
+      if (isInList) {
+        // End the previous list if applicable
+        ele.innerHTML += `<ul>${listItems.map(item => `<li>${item}</li>`).join('')}</ul>`;
+        listItems = [];
+        isInList = false;
+      }
+
+      // Check for image markdown and replace with <img> tag
+      const imageRegex = /!\[([^\]]*)]\(([^)]*)\)/g;
+      let match;
+      let lastIndex = 0;
+
+      while ((match = imageRegex.exec(line)) !== null) {
+        const altText = match[1];
+        const imageURL = match[2];
+        const imgTag = `<img src="${imageURL}" alt="${altText}" class="article-image">`;
+        ele.innerHTML += line.substring(lastIndex, match.index) + imgTag;
+        lastIndex = match.index + match[0].length;
+      }
+
+      // Append the remaining text after processing images
+      ele.innerHTML += line.substring(lastIndex) + '<br>';
+    }
+  });
+
+  // Handle the remaining list items, if any
+  if (isInList) {
+    ele.innerHTML += `<ul>${listItems.map(item => `<li>${item}</li>`).join('')}</ul>`;
+  }
 }
 
-let months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+function insertImageIntoArticle(imageURL) {
+  const cursorPosition = article.selectionStart; // Get the current cursor position
+  const articleText = article.value;
 
-publishBtn.addEventListener('click', async () => {
-    if (articleField.value.length && blogTitleField.value.length) {
-        let letters = 'abcdefghijklmnoprstuvwxyz'; 
-        let blogTitle = blogTitleField.value.split(" ").join("-");
-        let id = '';
-        for (let i = 0; i < 4; i++) {
-            id += letters[Math.floor(Math.random() * letters.length)];
-        }
-        let docName = `${blogTitle}-${id}`;
-        let date = new Date();
+  // Insert the image URL at the cursor position
+  const newArticleText =
+    articleText.substring(0, cursorPosition) +
+    `![Alt Text](${imageURL})` +
+    articleText.substring(cursorPosition);
 
-        const data = {
-            title: blogTitleField.value,
-            article: articleField.value,
-            bannerImage: bannerPath,
-            publishedAt: `${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()}`
-        };
+  // Update the article's value with the new text
+  article.value = newArticleText;
+}
 
-        try {
-            await setDoc(doc(db, "blogs", docName), data);
-            location.href = `/${docName}`;
-        } catch (err) {
-            console.error(err);
-        }
+async function addPostToDB() {
+  try {
+    const docRef = await addDoc(collection(db, "blogs"), {
+      title: `${blogTitle.value}`,
+      article: `${article.value}`,
+      bannerImage: bannerPath,
+      articleImage: downloadURL,
+      createdAt: serverTimestamp(),
+    });
+
+    const blogID = docRef.id;
+    console.log("Document written with ID: ", blogID);
+
+    // Update the document with the correct blogID
+    await setDoc(doc(db, "blogs", blogID), { id: blogID }, { merge: true });
+  } catch (error) {
+    console.error(error.message);
+  }
+}
+
+function clearInputField(field) {
+  if (field === banner) {
+    field.style.backgroundImage = '';
+  } else {
+    field.value = "";
+  }
+}
+
+async function uploadArticleImage(event) {
+  const file = event.target.files[0];
+
+  if (file) {
+    const timestamp = new Date().getTime();
+    const filename = `file_${timestamp}_${file.name}`;
+    const fileRef = ref(storageRef, filename);
+
+    try {
+      await uploadBytes(fileRef, file);
+      console.log('File uploaded successfully!');
+
+      const downloadURL = await getDownloadURL(fileRef);
+
+      // Insert the image URL at the current cursor position in the article
+      insertImageIntoArticle(downloadURL);
+    } catch (error) {
+      console.error('Error uploading file:', error.message);
     }
-})
+  }
+}
+
+

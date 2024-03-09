@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/home.css">
+    <link rel="stylesheet" href="/css/blog.css">
+    <link rel="stylesheet" href="/css/signIn.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300&family=Pacifico&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <title>Dieta Na Codzien</title>
+</head>
+<body>
+    
+    
+        <nav class="navbar">
+            
+            <ul class="links-container">
+                <li class="link-item">
+                    <a href="/about.html" class="link">O mnie</a> 
+                </li>
+                <li class="link-item">
+                    <a href="/index.html" class="link">Blog</a>
+                </li>
+                <li class="link-item">
+                    <a href="/contact.html" class="link">Kontakt</a>
+                </li>
+                <!-- <li class="link-item">
+                    <a href="/editor.html" class="link">Zaloguj</a>
+                </li> -->
+                <li class="link-item">
+                    <a href="" class="link">Załóż konto</a>
+                </li>
+            </ul>
+       
+            <div class="logo">
+                <img id="logo" alt="logo" src="/img/logo.png">
+                <span id="logo-text">Dieta Na Co Dzień </span>
+        
+            </div>
+    </nav>
+
+    <div class="provider-buttons">
+        <button id="sign-in-with-google-btn" class="provider-btn">
+            <img src="img/google.png" class="google-btn-logo">
+            Sign in with Google
+        </button>
+    </div>
+    
+    <div class="auth-fields-and-buttons">
+        <input id="email-input" type="email" placeholder="Email">
+        <input id="password-input" type="password" placeholder="Password">
+        
+        <button id="sign-in-btn" class="primary-btn">Sign in</button>
+        <button id="create-account-btn" class="secondary-btn">Create Account</button>
+    </div>
+</div>
+
+</main>
+<footer>
+    <span id="footer-text"> © 2023 Dieta Na Co Dzień. All Rights Reserved.</span>
+</footer>
+<script type="module" src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js"></script>
+<script type="module" src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js"></script>
+
+<script src="/js/signIn.js" type="module"></script>
+
+
+
+</body>
+</html>

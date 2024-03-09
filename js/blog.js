@@ -1,83 +1,107 @@
-import { db } from "/blog-o-diecie/js/firebase.js";
-import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { getDoc, doc } from "/js/firebase.js";
 
 
-// let blogID = decodeURI(location.pathname.split("/").pop());
-let pathSegments = location.pathname.split("/").filter(segment => segment !== "");
-let blogID = pathSegments[pathSegments.length - 1];
 
-console.log("Original path:", location.pathname);
-console.log("Path segments:", pathSegments);
-console.log("Extracted blogID:", blogID);
-let docRef = doc(db, "blogs", blogID);
+function renderSinglePost(titleEl, publishedEl, imageEl, articleEl, postData) {
+  
+  try {
+    // Set the content of title element
+    titleEl.innerHTML = postData.title;
 
+    // Set the content of published element
+    publishedEl.innerHTML = `opublikowano dnia - ${displayDate(postData.createdAt)}`;
 
-getDoc(docRef)
-  .then((doc) => {
-    if (doc.exists()) {
-        
-      const data = doc.data();
-      setupBlog(data);
-    } else {
-      location.replace("/blog-o-diecie/");
-    }
-  })
-  .catch((error) => {
-    console.error("Error getting document:", error);
-  });
+    // Set the background image of the image element
+    imageEl.style.backgroundImage = `url(${postData.bannerImage})`;
 
-const setupBlog = (data) => {
-  const banner = document.querySelector('.banner');
-  const blogTitle = document.querySelector('.title');
-  const titleTag = document.querySelector('title');
-  const publish = document.querySelector('.published');
-  titleTag.innerHTML = blogTitle.innerHTML = data.title;
-  publish.innerHTML = data.publishedAt;
-
-
- 
-    banner.style.backgroundImage = `url(${data.bannerImage})`;
-    
-    const article = document.querySelector('.article');
-    addArticle(article, data.article);
-
-};
-
-
-const addArticle = (ele, data) => {
-    data = data.split("\n").filter(item => item.length);
-    console.log(data);
-
-    data.forEach(item => {
-        if(item[0] == '#') {
-            let hCount = 0;
-            let i = 0;
-            while(item[i] == '#') {
-                hCount++;
-                i++
-            }
-            let tag = `h${hCount}`;
-            ele.innerHTML += `<${tag}>${item.slice(hCount, item.length)}</${tag}>`
-        } 
-        else if(item[0] == "!" && item[1] == "[") {
-            let separator;
-
-            for(let i = 0; i <= item.length; i++) {
-                if(item[i] == "]" && item[i + 1] == "(" && item[item.length - 1] == ")") {
-                    separator = i;
-                }
-            }
-            let alt = item.slice(1, separator);
-            let src = item.slice(separator + 2, item.length -1);
-            ele.innerHTML += `
-            <img src="${src}" alt="${alt}" class="article-image">
-            `;
-        }
-        
-        else {
-            ele.innerHTML += `<p>${item}</p>`;
-        }
-        
-    });
-
+    // Set the content of article element
+    articleEl.innerHTML = postData.article;
+  } catch (error) {
+    console.error("Error rendering single post:", error);
+  }
 }
+
+function fetchSingleBlogFromDB(blogID) {
+  const titleEl = document.querySelector('.title');
+  const publishedEl = document.querySelector('.published span'); // Corrected selector
+  const imageEl = document.querySelector('.image');
+  const articleEl = document.querySelector('.article');
+
+  const blogRef = doc(db, "blogs", blogID);
+
+  getDoc(blogRef)
+      .then((doc) => {
+          if (doc.exists()) {
+              renderSinglePost(titleEl, publishedEl, imageEl, articleEl, doc.data());
+          } else {
+              console.log("No such document!");
+          }
+      })
+      .catch((error) => {
+          console.log("Error getting document:", error);
+      });
+}
+
+
+document.addEventListener("DOMContentLoaded", () => {
+  // Get the necessary HTML elements
+  const titleEl = document.querySelector('.title');
+  const publishedEl = document.querySelector('.published span');
+  const articleEl = document.querySelector('.article');
+  const bannerEl = document.querySelector('.banner');
+
+  // Check if the "czytaj" button exists on the page
+  const readMoreButton = document.getElementById("czytaj");
+  if (readMoreButton) {
+    // Add a click event listener to the "czytaj" button
+    readMoreButton.addEventListener("click", (event) => {
+      event.preventDefault();
+      
+      // Extract the blog post ID from the button's href attribute
+      const blogID = doc.id;
+
+      // Reference to the blog post in Firebase
+      const blogRef = doc(db, "blogs", blogID);
+
+      // Fetch the blog post data from Firebase
+      getDoc(blogRef)
+        .then((doc) => {
+          if (doc.exists()) {
+            const data = doc.data();
+
+            // Display the blog post content
+            titleEl.textContent = data.title;
+            publishedEl.textContent = `opublikowano dnia - ${displayDate(data.publishedAt)}`;
+            articleEl.innerHTML = data.article;
+            bannerEl.style.backgroundImage = `url(${data.bannerImage})`;
+          } else {
+            console.error("No such document!");
+          }
+        })
+        .catch((error) => {
+          console.error("Error getting document:", error);
+        });
+    });
+  }
+
+
+function displayDate(firebaseDate) {
+  if (!firebaseDate) {
+    return "Date not available";
+  }
+  const date = firebaseDate.toDate();
+
+  const day = date.getDate();
+  const year = date.getFullYear();
+
+  const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  const month = monthNames[date.getMonth()];
+
+  let hours = date.getHours();
+  let minutes = date.getMinutes();
+  hours = hours < 10 ? "0" + hours : hours;
+  minutes = minutes < 10 ? "0" + minutes : minutes;
+
+  return `${day} ${month} ${year} - ${hours}:${minutes}`;
+}
+});

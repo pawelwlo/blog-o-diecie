@@ -1,16 +1,24 @@
 {
+  "hosting": {
+    "public": "/",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  },
+  "emulators": {
+   
+
     "hosting": {
-      "public": "diet-blog", 
-      "ignore": [
-        "firebase.json", 
-        "**/.*",
-        "**/node_modules/**" 
-      ],
-      "rewrites": [
-        {
-          "source": "https://pawelwlo.github.io/dieta-blog/home.html"
-        }
-      ]
+      "port": 5000,
+      "host": "0.0.0.0:5000"
     }
   }
-  
+}
