@@ -1,5 +1,5 @@
-import { auth, createUserWithEmailAndPassword } from "/js/firebase.js";
-import { showLoggedInView, showLoggedInView } from "/js/index.js";
+import { auth, createUserWithEmailAndPassword } from "js/firebase.js";
+import { showLoggedInView, showLoggedInView } from "js/index.js";
 
 console.log(auth);
 
