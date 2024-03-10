@@ -1,4 +1,4 @@
-import { getDoc, doc } from "/js/firebase.js";
+import { getDoc, doc } from "js/firebase.js";
 
 
 
