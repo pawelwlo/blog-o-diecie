@@ -1,5 +1,5 @@
 
-import { collection } from "/js/firebase.js";
+import { collection } from "js/firebase.js";
 import { 
         auth, 
         createUserWithEmailAndPassword, 
@@ -11,7 +11,7 @@ import {
         doc,
         getDoc
          } 
-         from "/js/firebase.js";
+         from "js/firebase.js";
 
 
 
