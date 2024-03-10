@@ -1,4 +1,4 @@
-import { auth } from "/js/firebase.js";
+import { auth } from "js/firebase.js";
 import {
   db,
   collection,
@@ -10,7 +10,7 @@ import {
   getDownloadURL,
   setDoc,
   doc
-} from "/js/firebase.js";
+} from "js/firebase.js";
 
 const bannerPicUpload = document.getElementById("banner-upload");
 const blogTitle = document.getElementById("title");
